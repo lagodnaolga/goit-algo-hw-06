@@ -36,14 +36,19 @@ class Record:
 
     def edit_phone(self, old_phone, new_phone):
         phone = self.find_phone(old_phone)
-        phone.value = new_phone
+        if phone is None:
+            raise ValueError("Phone is not found.")
+        if phone.is_phone_valid(new_phone):
+            phone.value = new_phone
+        else:
+            raise ValueError("Incorrect phone format.")
 
     
     def find_phone (self, phone_to_find):
         for phone in self.phones:
             if phone.value == phone_to_find:
                 return phone
-        raise ValueError("Phone is not found")
+        return None
 
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
